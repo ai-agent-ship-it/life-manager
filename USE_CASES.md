@@ -9,27 +9,28 @@
 ## 2. Diagrama de Casos de Uso (Mermaid)
 
 ```mermaid
-useCaseDiagram
-    actor "Usuario" as U
-    actor "Agente IA" as AI
-    actor "Sistema" as S
+graph TD
+    %% Actores
+    U((Usuario))
+    AI[Agente IA]
+    S[(Sistema)]
 
-    package "Gestión Financiera" {
-        usecase "Registrar Gasto/Ingreso (Texto/Voz)" as UC1
-        usecase "Subir Recibo/Factura (Imagen/PDF)" as UC2
-        usecase "Consultar Reportes Financieros" as UC3
-        usecase "Gestionar Activos y Pasivos" as UC4
-    }
+    subgraph Gestion_Financiera [Gestión Financiera]
+        UC1([Registrar Gasto/Ingreso])
+        UC2([Subir Recibo/Factura])
+        UC3([Consultar Reportes])
+        UC4([Gestionar Activos])
+    end
 
-    package "Organización Personal" {
-        usecase "Crear Nota o Diario" as UC5
-        usecase "Programar Recordatorio" as UC6
-    }
+    subgraph Organizacion_Personal [Organización Personal]
+        UC5([Crear Nota/Diario])
+        UC6([Programar Recordatorio])
+    end
 
-    package "Procesamiento Inteligente" {
-        usecase "Inferencia de Datos (Categorización)" as UC7
-        usecase "Extracción OCR/Transcripción" as UC8
-    }
+    subgraph Procesamiento [Procesamiento Inteligente]
+        UC7([Categorización])
+        UC8([Extracción OCR])
+    end
 
     U --> UC1
     U --> UC2
@@ -38,34 +39,33 @@ useCaseDiagram
     U --> UC5
     U --> UC6
 
-    UC1 ..> UC7 : <<include>>
-    UC2 ..> UC8 : <<include>>
-    UC8 ..> UC7 : <<include>>
+    UC1 -.-> UC7
+    UC2 -.-> UC8
+    UC8 -.-> UC7
     
-    UC7 -- AI
-    UC8 -- AI
-    UC3 -- S
-    UC4 -- S
+    UC7 --- AI
+    UC8 --- AI
+    UC3 --- S
+    UC4 --> S
 ```
 
 ## 3. Diagrama de Secuencia: Registro Multimodal
-Este diagrama muestra el flujo desde que el usuario envía una foto de un recibo hasta que se guarda como transacción.
 
 ```mermaid
 sequenceDiagram
     participant U as Usuario
     participant B as Backend (Go)
-    participant AI as Agente IA (LLM/Vision)
+    participant AI as Agente IA
     participant DB as PostgreSQL
     participant S3 as Almacenamiento
 
-    U->>B: Envía Foto de Recibo (Multipart)
-    B->>S3: Guarda archivo original
-    B->>AI: Procesa Imagen (OCR + Inferencia)
-    AI-->>B: JSON {monto: 50.0, moneda: "USD", categoria: "Comida", comercio: "Starbucks"}
-    B->>DB: Inserta Transacción + Referencia a Imagen
+    U->>B: Envía Foto de Recibo
+    B->>S3: Guarda archivo
+    B->>AI: Procesa Imagen
+    AI-->>B: JSON con datos
+    B->>DB: Inserta Transacción
     DB-->>B: Confirmación
-    B-->>U: Notificación: "Gasto de $50 en Starbucks registrado"
+    B-->>U: Notificación de éxito
 ```
 
 ## 4. Diagrama de Clases (Estructura de Datos)
@@ -75,7 +75,6 @@ classDiagram
     class User {
         +UUID id
         +String email
-        +String timezone
     }
 
     class Transaction {
@@ -84,22 +83,17 @@ classDiagram
         +String currency
         +String category
         +DateTime date
-        +String type (Income/Expense/Credit)
-        +UUID attachment_id
     }
 
     class Entry {
         +UUID id
         +String content
-        +String type (Note/Journal/Reminder)
-        +DateTime scheduled_at
+        +String type
     }
 
     class Attachment {
         +UUID id
         +String file_path
-        +String mime_type
-        +String raw_ocr_text
     }
 
     User "1" -- "*" Transaction : manages
@@ -109,4 +103,4 @@ classDiagram
 ```
 
 ---
-*Documento generado el 2026-03-06*
+*Documento actualizado el 2026-03-06*
