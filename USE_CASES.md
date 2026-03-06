@@ -45,6 +45,7 @@ graph TD
     UC2 -.-> UC8
     UC8 -.-> UC7
     UC9 -.-> UC7
+    UC9 -.-> UC6 : include
     
     UC7 --- AI
     UC8 --- AI
@@ -114,12 +115,23 @@ classDiagram
         +String file_path
     }
 
+    class Reminder {
+        +UUID id
+        +String title
+        +String message
+        +DateTime scheduled_at
+        +String channel
+        +String status
+    }
+
     User "1" -- "*" Transaction : manages
     User "1" -- "*" RecurringTransaction : schedules
     User "1" -- "*" Entry : creates
+    User "1" -- "*" Reminder : receives
     Transaction "0..1" -- "1" Attachment : has
     Entry "0..1" -- "1" Attachment : has
     RecurringTransaction "1" -- "*" Transaction : generates
+    RecurringTransaction "1" -- "*" Reminder : triggers
 ```
 
 ---
