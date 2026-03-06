@@ -45,13 +45,17 @@ graph TD
     UC2 -.-> UC8
     UC8 -.-> UC7
     UC9 -.-> UC7
-    UC9 -.-> UC6 : include
+    UC9 -.->|<<include>>| UC6
     
     UC7 --- AI
     UC8 --- AI
+    UC1 --- S
+    UC2 --- S
     UC3 --- S
-    UC4 --> S
-    UC9 --> S
+    UC4 --- S
+    UC5 --- S
+    UC6 --- S
+    UC9 --- S
 ```
 
 ## 3. Diagrama de Secuencia: Registro Multimodal
@@ -128,8 +132,8 @@ classDiagram
     User "1" -- "*" RecurringTransaction : schedules
     User "1" -- "*" Entry : creates
     User "1" -- "*" Reminder : receives
-    Transaction "0..1" -- "1" Attachment : has
-    Entry "0..1" -- "1" Attachment : has
+    Transaction "1" -- "0..1" Attachment : has
+    Entry "1" -- "0..1" Attachment : has
     RecurringTransaction "1" -- "*" Transaction : generates
     RecurringTransaction "1" -- "*" Reminder : triggers
 ```
