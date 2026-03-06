@@ -20,6 +20,7 @@ graph TD
         UC2([Subir Recibo/Factura])
         UC3([Consultar Reportes])
         UC4([Gestionar Activos])
+        UC9([Programar Transacción Recurrente])
     end
 
     subgraph Organizacion_Personal [Organización Personal]
@@ -38,15 +39,18 @@ graph TD
     U --> UC4
     U --> UC5
     U --> UC6
+    U --> UC9
 
     UC1 -.-> UC7
     UC2 -.-> UC8
     UC8 -.-> UC7
+    UC9 -.-> UC7
     
     UC7 --- AI
     UC8 --- AI
     UC3 --- S
     UC4 --> S
+    UC9 --> S
 ```
 
 ## 3. Diagrama de Secuencia: Registro Multimodal
@@ -83,6 +87,20 @@ classDiagram
         +String currency
         +String category
         +DateTime date
+        +UUID recurring_id
+    }
+
+    class RecurringTransaction {
+        +UUID id
+        +Float amount
+        +String currency
+        +String category
+        +String frequency
+        +JSONB rules
+        +DateTime start_date
+        +DateTime end_date
+        +DateTime last_run
+        +DateTime next_run
     }
 
     class Entry {
@@ -97,9 +115,11 @@ classDiagram
     }
 
     User "1" -- "*" Transaction : manages
+    User "1" -- "*" RecurringTransaction : schedules
     User "1" -- "*" Entry : creates
     Transaction "0..1" -- "1" Attachment : has
     Entry "0..1" -- "1" Attachment : has
+    RecurringTransaction "1" -- "*" Transaction : generates
 ```
 
 ---

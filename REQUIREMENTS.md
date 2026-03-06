@@ -12,6 +12,13 @@
     - **Documentos**: Extracción de datos de archivos PDF (estados de cuenta, facturas electrónicas).
 - **RF1.4: Gestión de Activos y Pasivos**: Registro y seguimiento de bienes (activos) y deudas (pasivos).
 - **RF1.5: Reportes**: Generación de visualizaciones de gastos por categoría, balance mensual y evolución patrimonial.
+- **RF1.6: Gastos e Ingresos Recurrentes**: El sistema debe permitir programar transacciones automáticas con recurrencia flexible:
+    - Diaria.
+    - Semanal (uno o varios días específicos de la semana).
+    - Quincenal.
+    - Mensual (días específicos del mes).
+    - Bimestral, trimestral, semestral, anual.
+    - Personalizada (cada X días/semanas/meses).
 
 ### RF2: Organización Personal
 - **RF2.1: Notas y Diario**: Creación de entradas de texto enriquecido para bitácoras personales.
